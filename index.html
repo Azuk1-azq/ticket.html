@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>チケット確認</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F6F2;
+  --surface: #FFFFFF;
+  --surface2: #F2F1ED;
+  --border: #E8E6E0;
+  --text: #1A1814;
+  --text2: #7A7670;
+  --text3: #B0ADA6;
+  --accent: #2B5CE6;
+  --accent-bg: #EEF2FD;
+  --success: #16A34A;
+  --success-bg: #F0FDF4;
+  --success-border: #BBF7D0;
+  --warn: #CA8A04;
+  --warn-bg: #FEFCE8;
+  --warn-border: #FDE68A;
+  --danger: #DC2626;
+  --danger-bg: #FEF2F2;
+  --danger-border: #FECACA;
+  --gold: #B45309;
+  --gold-bg: #FFFBEB;
+  --gold-border: #FDE68A;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 80px;
+}
+
+/* ── APP SHELL ── */
+.app-header {
+  width: 100%; max-width: 400px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.app-logo {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--text2);
+}
+.app-logo span { color: var(--accent); }
+.app-badge {
+  font-size: 11px; color: var(--text3);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px 10px;
+}
+
+.card {
+  width: 100%; max-width: 400px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.card-header {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.card-eyebrow {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+.card-title {
+  font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.3;
+}
+.card-body { padding: 24px; }
+
+/* ── INPUT ── */
+.field-label {
+  font-size: 12px; font-weight: 500; color: var(--text2);
+  margin-bottom: 8px; display: block;
+}
+.code-input-wrap { position: relative; }
+.code-input {
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: 26px; font-weight: 500;
+  letter-spacing: 0.12em; text-align: center;
+  color: var(--text);
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 12px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.code-input:focus {
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(43,92,230,0.12);
+}
+.code-input::placeholder { color: var(--text3); font-size: 20px; }
+.code-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+.err-msg {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--danger);
+  min-height: 20px; margin-top: 8px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.err-msg.visible { opacity: 1; }
+.err-icon { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%; padding: 15px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: #fff; background: var(--accent);
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 20px;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(43,92,230,0.3);
+}
+.btn-primary:hover { background: #2451CC; box-shadow: 0 4px 16px rgba(43,92,230,0.35); }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+  width: 100%; padding: 13px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px; font-weight: 500;
+  color: var(--text2); background: transparent;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 10px;
+  transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--surface2); border-color: #ccc; color: var(--text); }
+.btn-secondary:active { transform: scale(0.98); }
+
+.btn-danger-outline {
+  width: 100%; padding: 13px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px; font-weight: 500;
+  color: var(--danger); background: transparent;
+  border: 1.5px solid var(--danger-border); border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 8px;
+  transition: all 0.15s;
+}
+.btn-danger-outline:hover { background: var(--danger-bg); }
+.btn-danger-outline:active { transform: scale(0.98); }
+
+/* ── CONFIRM ── */
+.confirm-product {
+  background: var(--accent-bg);
+  border: 1px solid #C7D7FA;
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.confirm-product-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.confirm-product-name { font-size: 16px; font-weight: 700; color: var(--text); }
+.confirm-product-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+.confirm-product.gold-variant {
+  background: var(--gold-bg); border-color: var(--gold-border);
+}
+.confirm-product.gold-variant .confirm-product-icon { background: var(--gold); }
+
+.detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-key { color: var(--text2); }
+.detail-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); font-weight: 500; }
+
+/* pip bar */
+.pip-wrap { padding: 14px 0 4px; }
+.pip-label { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
+.pip-bar { display: flex; gap: 4px; }
+.pip {
+  flex: 1; height: 8px; border-radius: 4px;
+  background: var(--border); transition: background 0.2s;
+}
+.pip.used { background: #FCA5A5; }
+.pip.current { background: var(--gold); }
+
+/* ── SUCCESS ── */
+.success-icon-wrap {
+  text-align: center; padding: 28px 0 20px;
+}
+.success-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--success-bg); border: 2px solid var(--success-border);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.success-headline { font-size: 22px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 4px; }
+.success-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 20px; }
+
+.receipt-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.receipt-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.receipt-row:last-child { border-bottom: none; }
+.receipt-key { color: var(--text2); }
+.receipt-val { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--text); }
+.receipt-val.highlight { color: var(--success); font-size: 14px; }
+.receipt-val.gold { color: var(--gold); }
+
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 16px;
+}
+.warn-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.warn-box-text { font-size: 12px; color: #92400E; line-height: 1.7; }
+.warn-box-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.4);
+  align-items: flex-end; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal-sheet {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 480px;
+  padding: 0 0 32px;
+  animation: sheetUp 0.3s cubic-bezier(0.16,1,0.3,1);
+  position: relative;
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.sheet-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--border); margin: 12px auto 20px;
+}
+.sheet-close {
+  position: absolute; top: 14px; right: 16px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text2);
+  transition: background 0.15s;
+}
+.sheet-close:hover { background: var(--border); }
+.sheet-body { padding: 0 24px; }
+.sheet-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.sheet-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+.pw-input {
+  width: 100%; font-family: 'DM Mono', monospace;
+  font-size: 24px; font-weight: 500; letter-spacing: 0.2em; text-align: center;
+  color: var(--text); background: var(--surface2);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px; outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  margin-bottom: 8px;
+}
+.pw-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(43,92,230,0.12); background: var(--surface); }
+.pw-err { font-size: 12px; color: var(--danger); min-height: 18px; margin-bottom: 12px; }
+
+/* ── RETURN SHEET ── */
+.danger-sheet .sheet-title { color: var(--danger); }
+.danger-list { font-size: 13px; color: var(--text2); line-height: 1.9; margin-bottom: 20px; padding-left: 4px; }
+.danger-list li { list-style: none; display: flex; gap: 8px; }
+.danger-list li::before { content: '·'; color: var(--danger); font-size: 18px; line-height: 1.3; flex-shrink: 0; }
+
+/* ── RESET FAB ── */
+.reset-fab {
+  position: fixed; bottom: 20px; right: 16px; z-index: 100;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px; font-weight: 500; color: var(--danger);
+  background: var(--surface); border: 1px solid var(--danger-border);
+  border-radius: 20px; padding: 8px 14px;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.15s; line-height: 1.5; text-align: center;
+  max-width: 180px;
+}
+.reset-fab:hover { background: var(--danger-bg); box-shadow: 0 4px 12px rgba(220,38,38,0.15); }
+
+/* screen visibility */
+.screen { display: none; }
+.screen.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-logo">ticket<span>.</span>verify</div>
+  <div class="app-badge" id="clock">--:--</div>
+</div>
+
+<!-- ── SCREEN 1: ENTRY ── -->
+<div id="s-entry" class="screen active">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-eyebrow">チケット認証</div>
+      <div class="card-title">シリアルコードを入力</div>
+    </div>
+    <div class="card-body">
+      <label class="field-label" for="code">シリアルコード</label>
+      <div class="code-input-wrap">
+        <input type="text" class="code-input" id="code"
+          placeholder="0000-0000-0000" maxlength="14"
+          autocomplete="off" spellcheck="false" inputmode="numeric" />
+      </div>
+      <div class="err-msg" id="err-msg">
+        <svg class="err-icon" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span id="err-text"></span>
+      </div>
+      <button class="btn-primary" onclick="verify()">認証する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: CONFIRM ── -->
+<div id="s-confirm" class="screen">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-eyebrow">内容確認</div>
+      <div class="card-title" id="confirm-title">ご利用内容の確認</div>
+    </div>
+    <div class="card-body">
+      <div class="confirm-product" id="confirm-product-box">
+        <div class="confirm-product-icon" id="confirm-icon">💆</div>
+        <div>
+          <div class="confirm-product-name" id="confirm-product-name"></div>
+          <div class="confirm-product-label">サービス内容</div>
+        </div>
+      </div>
+
+      <div id="confirm-details">
+        <div class="detail-row">
+          <span class="detail-key">シリアルコード</span>
+          <span class="detail-val" id="confirm-code-disp"></span>
+        </div>
+        <div class="detail-row" id="confirm-remaining-row" style="display:none">
+          <span class="detail-key">使用後の残り回数</span>
+          <span class="detail-val" id="confirm-remaining-val" style="color:var(--gold)"></span>
+        </div>
+      </div>
+
+      <div id="confirm-pips" class="pip-wrap" style="display:none">
+        <div class="pip-label">使用状況（🟤 使用済 ／ 🟡 今回 ／ ⬜ 残り）</div>
+        <div class="pip-bar" id="pip-bar"></div>
+      </div>
+
+      <button class="btn-primary" id="confirm-btn" onclick="confirmUse()" style="margin-top:24px">この内容で使用する</button>
+      <button class="btn-secondary" onclick="cancelConfirm()">戻る</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN 3: SUCCESS ── -->
+<div id="s-result" class="screen">
+  <div class="card">
+    <div class="success-icon-wrap">
+      <div class="success-circle">✅</div>
+    </div>
+    <div style="padding: 0 24px 24px;">
+      <div class="success-headline">支払処理完了</div>
+      <div class="success-sub">この画面をお見せください</div>
+
+      <div class="receipt-box">
+        <div class="receipt-row">
+          <span class="receipt-key">サービス</span>
+          <span class="receipt-val highlight" id="result-product"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-key">コード</span>
+          <span class="receipt-val" id="result-code"></span>
+        </div>
+        <div class="receipt-row" id="result-remaining-row" style="display:none">
+          <span class="receipt-key">残り使用回数</span>
+          <span class="receipt-val gold" id="result-remaining-num"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-key">認証日時</span>
+          <span class="receipt-val" id="result-time"></span>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <div class="warn-box-icon">⚠️</div>
+        <div class="warn-box-text">
+          <strong>戻る前にご確認ください</strong>
+          確認してもらってから戻るボタンを押してください。戻ると再表示できません。
+        </div>
+      </div>
+
+      <button class="btn-danger-outline" onclick="openReturnWarning()">← 戻る</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESET FAB ── -->
+<button class="reset-fab" onclick="openResetModal()">🔄 使用状況をリセット<br>(すべて再利用可能に)</button>
+
+<!-- ── RETURN WARNING SHEET ── -->
+<div class="modal-overlay" id="return-modal" onclick="handleOverlayClick(event,'return-modal')">
+  <div class="modal-sheet danger-sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeReturnWarning()">✕</button>
+    <div class="sheet-body">
+      <div class="sheet-title">本当に戻りますか？</div>
+      <div class="sheet-sub">以下の点をご確認の上、操作してください。</div>
+      <ul class="danger-list">
+        <li>確認してもらいましたか？</li>
+        <li>戻ると完了画面は再表示できません</li>
+      </ul>
+      <button class="btn-danger-outline" onclick="doReturn()">確認済み・戻る</button>
+      <button class="btn-secondary" onclick="closeReturnWarning()">このままにする</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESET PASSWORD SHEET ── -->
+<div class="modal-overlay" id="reset-modal" onclick="handleOverlayClick(event,'reset-modal')">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeResetModal()">✕</button>
+    <div class="sheet-body">
+      <div class="sheet-title">使用状況のリセット</div>
+      <div class="sheet-sub">管理者パスワードを入力してください。この操作はすべてのコードを再利用可能にします。</div>
+      <input type="password" class="pw-input" id="reset-pw" placeholder="······" maxlength="10" autocomplete="off" />
+      <div class="pw-err" id="reset-err"></div>
+      <button class="btn-primary" onclick="doReset()" style="margin-top:0">リセットを実行</button>
+      <button class="btn-secondary" onclick="closeResetModal()">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Codes ─────────────────────────────────────────────
+const SINGLE_CODES = new Set([
+  '7454-6491-4491','5395-6549-1245','9453-5639-1549',
+  '6495-2649-2375','9465-3264-9365'
+]);
+const MULTI_CODE  = '6582-8562-7644';
+const MULTI_LIMIT = 10;
+const USED_KEY    = 'pv_used_hashes';
+const MULTI_KEY   = 'pv_multi_count';
+
+async function hashStr(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function getUsedHashes() {
+  try { return new Set(JSON.parse(localStorage.getItem(USED_KEY)||'[]')); } catch { return new Set(); }
+}
+function saveUsedHash(h) {
+  const s=getUsedHashes(); s.add(h); localStorage.setItem(USED_KEY,JSON.stringify([...s]));
+}
+function getMultiCount() { return parseInt(localStorage.getItem(MULTI_KEY)||'0',10); }
+function incMultiCount() { localStorage.setItem(MULTI_KEY,String(getMultiCount()+1)); }
+
+// ── Clock ──────────────────────────────────────────────
+function tick() {
+  const d=new Date();
+  document.getElementById('clock').textContent=
+    [d.getHours(),d.getMinutes()].map(n=>String(n).padStart(2,'0')).join(':');
+}
+tick(); setInterval(tick,1000);
+
+// ── Input ──────────────────────────────────────────────
+const input=document.getElementById('code');
+input.addEventListener('input',e=>{
+  const d=e.target.value.replace(/\D/g,'').slice(0,12);
+  e.target.value=d.replace(/(\d{4})(\d{1,4})?(\d{1,4})?/,(_,a,b,c)=>[a,b,c].filter(Boolean).join('-'));
+  setError('');
+});
+input.addEventListener('keydown',e=>{ if(e.key==='Enter') verify(); });
+
+function setError(msg) {
+  const el=document.getElementById('err-msg');
+  document.getElementById('err-text').textContent=msg;
+  el.classList.toggle('visible',!!msg);
+  input.classList.toggle('error',!!msg);
+}
+
+// ── Screens ────────────────────────────────────────────
+let pendingCode='', pendingIsMulti=false;
+
+function show(id) {
+  ['s-entry','s-confirm','s-result'].forEach(s=>{
+    document.getElementById(s).classList.toggle('active',s===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Step 1: verify ─────────────────────────────────────
+async function verify() {
+  const code=input.value.trim();
+  if(!code){ setError('コードを入力してください'); return; }
+  const isMulti=code===MULTI_CODE;
+  const isSingle=SINGLE_CODES.has(code);
+  if(!isMulti&&!isSingle){ setError('コードが正しくありません'); return; }
+  if(isMulti){
+    if(getMultiCount()>=MULTI_LIMIT){ setError('このコードの使用回数が上限に達しています'); return; }
+  } else {
+    const hash=await hashStr(code);
+    if(getUsedHashes().has(hash)){ setError('このコードはすでに使用済みです'); return; }
+  }
+  pendingCode=code; pendingIsMulti=isMulti;
+  buildConfirm(); show('s-confirm');
+}
+
+function buildConfirm() {
+  const isMulti=pendingIsMulti;
+  const count=isMulti?getMultiCount():0;
+  const remaining=MULTI_LIMIT-count;
+  const box=document.getElementById('confirm-product-box');
+  const btn=document.getElementById('confirm-btn');
+
+  if(isMulti){
+    box.classList.add('gold-variant');
+    document.getElementById('confirm-icon').textContent='💆';
+    document.getElementById('confirm-product-name').textContent='マッサージ 10回分';
+    btn.style.background='var(--gold)';
+    btn.style.boxShadow='0 2px 8px rgba(180,83,9,0.3)';
+    document.getElementById('confirm-remaining-row').style.display='flex';
+    document.getElementById('confirm-remaining-val').textContent=`${remaining-1} 回`;
+    const pips=document.getElementById('confirm-pips');
+    pips.style.display='block';
+    const bar=document.getElementById('pip-bar');
+    bar.innerHTML='';
+    for(let i=0;i<MULTI_LIMIT;i++){
+      const p=document.createElement('div');
+      p.className='pip'+(i<count?' used':i===count?' current':'');
+      bar.appendChild(p);
+    }
+  } else {
+    box.classList.remove('gold-variant');
+    document.getElementById('confirm-icon').textContent='💆';
+    document.getElementById('confirm-product-name').textContent='マッサージ 1回分';
+    btn.style.background='';
+    btn.style.boxShadow='';
+    document.getElementById('confirm-remaining-row').style.display='none';
+    document.getElementById('confirm-pips').style.display='none';
+  }
+  document.getElementById('confirm-code-disp').textContent=pendingCode;
+}
+
+// ── Step 2: confirm ────────────────────────────────────
+async function confirmUse() {
+  if(pendingIsMulti){ incMultiCount(); }
+  else { saveUsedHash(await hashStr(pendingCode)); }
+
+  const count=pendingIsMulti?getMultiCount():0;
+  const remaining=MULTI_LIMIT-count;
+  const now=new Date();
+  const ts=[now.getFullYear(),now.getMonth()+1,now.getDate()].map((n,i)=>i?String(n).padStart(2,'0'):n).join('/')
+    +' '+[now.getHours(),now.getMinutes()].map(n=>String(n).padStart(2,'0')).join(':');
+
+  document.getElementById('result-product').textContent=pendingIsMulti?'マッサージ 10回分':'マッサージ 1回分';
+  document.getElementById('result-code').textContent=pendingCode;
+  document.getElementById('result-time').textContent=ts;
+  const remRow=document.getElementById('result-remaining-row');
+  if(pendingIsMulti){
+    remRow.style.display='flex';
+    document.getElementById('result-remaining-num').textContent=`${remaining} 回`;
+  } else { remRow.style.display='none'; }
+  show('s-result');
+}
+
+function cancelConfirm() { show('s-entry'); }
+
+// ── Return flow ────────────────────────────────────────
+function openReturnWarning(){ openSheet('return-modal'); }
+function closeReturnWarning(){ closeSheet('return-modal'); }
+function doReturn(){ closeReturnWarning(); pendingCode=''; pendingIsMulti=false; show('s-entry'); }
+
+// ── Reset flow ─────────────────────────────────────────
+function openResetModal(){
+  document.getElementById('reset-pw').value='';
+  document.getElementById('reset-err').textContent='';
+  openSheet('reset-modal');
+  setTimeout(()=>document.getElementById('reset-pw').focus(),300);
+}
+function closeResetModal(){ closeSheet('reset-modal'); }
+function doReset(){
+  if(document.getElementById('reset-pw').value!=='749424'){
+    document.getElementById('reset-err').textContent='パスワードが正しくありません';
+    return;
+  }
+  localStorage.removeItem(USED_KEY);
+  localStorage.removeItem(MULTI_KEY);
+  closeResetModal();
+  const fab=document.querySelector('.reset-fab');
+  const orig=fab.innerHTML;
+  fab.innerHTML='✓ リセット完了';
+  fab.style.color='var(--success)';
+  fab.style.borderColor='var(--success-border)';
+  setTimeout(()=>{ fab.innerHTML=orig; fab.style.color=''; fab.style.borderColor=''; },2000);
+}
+
+// ── Sheet helpers ──────────────────────────────────────
+function openSheet(id){ document.getElementById(id).classList.add('open'); }
+function closeSheet(id){ document.getElementById(id).classList.remove('open'); }
+function handleOverlayClick(e,id){ if(e.target===document.getElementById(id)) closeSheet(id); }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeSheet('return-modal'); closeSheet('reset-modal');
+  }
+  if(e.key==='Enter'){
+    if(document.getElementById('reset-modal').classList.contains('open')) doReset();
+  }
+});
+
+document.getElementById('reset-pw').addEventListener('keydown',e=>{
+  if(e.key==='Enter') doReset();
+});
+</script>
+</body>
+</html>
