@@ -32,7 +32,6 @@
   --radius: 16px;
   --radius-sm: 10px;
   --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -45,27 +44,42 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 24px 16px 80px;
+  padding: 16px 16px 100px;
 }
 
-/* ── APP SHELL ── */
+/* ── HEADER ── */
 .app-header {
   width: 100%; max-width: 400px;
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
+  padding: 12px 0 20px;
 }
-.app-logo {
-  font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--text2);
-}
+.app-logo { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; color: var(--text2); }
 .app-logo span { color: var(--accent); }
-.app-badge {
-  font-size: 11px; color: var(--text3);
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 20px; padding: 3px 10px;
-}
 
+.header-login-btn {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: #fff; background: var(--accent);
+  border: none; border-radius: 20px;
+  padding: 8px 18px; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(43,92,230,0.3);
+  transition: background 0.15s;
+}
+.header-login-btn:hover { background: #2451CC; }
+
+.user-badge {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.user-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+.user-avatar.admin { background: var(--gold); }
+.user-name { font-size: 13px; color: var(--text2); font-weight: 500; }
+
+/* ── CARD ── */
 .card {
   width: 100%; max-width: 400px;
   background: var(--surface);
@@ -76,266 +90,233 @@ body {
   animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1);
 }
 @keyframes slideUp {
-  from { opacity:0; transform: translateY(16px); }
-  to   { opacity:1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
 }
+.card-header { padding: 22px 22px 18px; border-bottom: 1px solid var(--border); }
+.card-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+.card-title { font-size: 20px; font-weight: 700; }
+.card-body { padding: 22px; }
 
-.card-header {
-  padding: 24px 24px 20px;
-  border-bottom: 1px solid var(--border);
-}
-.card-eyebrow {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
-}
-.card-title {
-  font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.3;
-}
-.card-body { padding: 24px; }
-
-/* ── INPUT ── */
-.field-label {
-  font-size: 12px; font-weight: 500; color: var(--text2);
-  margin-bottom: 8px; display: block;
-}
-.code-input-wrap { position: relative; }
+/* ── FIELDS ── */
+.field-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 7px; display: block; }
 .code-input {
   width: 100%;
   font-family: 'DM Mono', monospace;
-  font-size: 26px; font-weight: 500;
-  letter-spacing: 0.12em; text-align: center;
-  color: var(--text);
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 16px 12px;
-  outline: none;
+  font-size: 26px; font-weight: 500; letter-spacing: 0.12em; text-align: center;
+  color: var(--text); background: var(--surface2);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 15px 12px; outline: none;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
-.code-input:focus {
-  background: var(--surface);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(43,92,230,0.12);
-}
+.code-input:focus { background: var(--surface); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(43,92,230,0.12); }
 .code-input::placeholder { color: var(--text3); font-size: 20px; }
 .code-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
 
-.err-msg {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--danger);
-  min-height: 20px; margin-top: 8px;
-  opacity: 0; transition: opacity 0.2s;
-}
+.err-msg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--danger); min-height: 20px; margin-top: 8px; opacity: 0; transition: opacity 0.2s; }
 .err-msg.visible { opacity: 1; }
-.err-icon { width: 14px; height: 14px; flex-shrink: 0; }
+
+.login-input {
+  width: 100%; font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px; color: var(--text);
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 14px;
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.login-input:focus { background: var(--surface); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(43,92,230,0.12); }
+.login-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+.login-err { font-size: 12px; color: var(--danger); min-height: 20px; opacity: 0; transition: opacity 0.2s; display: flex; align-items: center; gap: 5px; margin: 8px 0; }
 
 /* ── BUTTONS ── */
 .btn-primary {
   width: 100%; padding: 15px;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 15px; font-weight: 700;
-  color: #fff; background: var(--accent);
-  border: none; border-radius: var(--radius-sm);
-  cursor: pointer; margin-top: 20px;
-  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  font-family: 'Noto Sans JP', sans-serif; font-size: 15px; font-weight: 700;
+  color: #fff; background: var(--accent); border: none; border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 16px;
+  transition: background 0.15s, transform 0.1s;
   box-shadow: 0 2px 8px rgba(43,92,230,0.3);
 }
-.btn-primary:hover { background: #2451CC; box-shadow: 0 4px 16px rgba(43,92,230,0.35); }
+.btn-primary:hover { background: #2451CC; }
 .btn-primary:active { transform: scale(0.98); }
-
 .btn-secondary {
-  width: 100%; padding: 13px;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 14px; font-weight: 500;
-  color: var(--text2); background: transparent;
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; margin-top: 10px;
-  transition: all 0.15s;
+  width: 100%; padding: 13px; font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px; font-weight: 500; color: var(--text2);
+  background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; margin-top: 10px; transition: all 0.15s;
 }
-.btn-secondary:hover { background: var(--surface2); border-color: #ccc; color: var(--text); }
-.btn-secondary:active { transform: scale(0.98); }
-
+.btn-secondary:hover { background: var(--surface2); color: var(--text); }
 .btn-danger-outline {
-  width: 100%; padding: 13px;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 14px; font-weight: 500;
-  color: var(--danger); background: transparent;
-  border: 1.5px solid var(--danger-border); border-radius: var(--radius-sm);
-  cursor: pointer; margin-top: 8px;
-  transition: all 0.15s;
+  width: 100%; padding: 13px; font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px; font-weight: 500; color: var(--danger);
+  background: transparent; border: 1.5px solid var(--danger-border);
+  border-radius: var(--radius-sm); cursor: pointer; margin-top: 8px; transition: all 0.15s;
 }
 .btn-danger-outline:hover { background: var(--danger-bg); }
-.btn-danger-outline:active { transform: scale(0.98); }
 
 /* ── CONFIRM ── */
 .confirm-product {
-  background: var(--accent-bg);
-  border: 1px solid #C7D7FA;
-  border-radius: var(--radius-sm);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  display: flex; align-items: center; gap: 12px;
+  background: var(--accent-bg); border: 1px solid #C7D7FA;
+  border-radius: var(--radius-sm); padding: 14px 18px;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 12px;
 }
+.confirm-product.gold-variant { background: var(--gold-bg); border-color: var(--gold-border); }
 .confirm-product-icon {
   width: 40px; height: 40px; border-radius: 10px;
   background: var(--accent); display: flex; align-items: center; justify-content: center;
   font-size: 20px; flex-shrink: 0;
 }
-.confirm-product-name { font-size: 16px; font-weight: 700; color: var(--text); }
+.confirm-product.gold-variant .confirm-product-icon { background: var(--gold); }
+.confirm-product-name { font-size: 16px; font-weight: 700; }
 .confirm-product-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-.confirm-product.gold-variant {
-  background: var(--gold-bg); border-color: var(--gold-border);
-}
-.confirm-product.gold-variant .confirm-product-icon { background: var(--gold); }
-
-.detail-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 11px 0; border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
+.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
 .detail-row:last-child { border-bottom: none; }
 .detail-key { color: var(--text2); }
-.detail-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); font-weight: 500; }
+.detail-val { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
 
-/* pip bar */
-.pip-wrap { padding: 14px 0 4px; }
+.pip-wrap { padding: 12px 0 4px; }
 .pip-label { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
 .pip-bar { display: flex; gap: 4px; }
-.pip {
-  flex: 1; height: 8px; border-radius: 4px;
-  background: var(--border); transition: background 0.2s;
-}
+.pip { flex: 1; height: 8px; border-radius: 4px; background: var(--border); }
 .pip.used { background: #FCA5A5; }
 .pip.current { background: var(--gold); }
 
 /* ── SUCCESS ── */
-.success-icon-wrap {
-  text-align: center; padding: 28px 0 20px;
-}
+.success-icon-wrap { text-align: center; padding: 28px 0 18px; }
 .success-circle {
   width: 72px; height: 72px; border-radius: 50%;
   background: var(--success-bg); border: 2px solid var(--success-border);
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 36px;
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 36px;
+  animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
 }
-@keyframes popIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-.success-headline { font-size: 22px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 4px; }
-.success-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 20px; }
+@keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
+.success-headline { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.success-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 18px; }
 
-.receipt-box {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-}
-.receipt-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
+.receipt-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 14px; }
+.receipt-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
 .receipt-row:last-child { border-bottom: none; }
 .receipt-key { color: var(--text2); }
-.receipt-val { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--text); }
-.receipt-val.highlight { color: var(--success); font-size: 14px; }
+.receipt-val { font-family: 'DM Mono', monospace; font-weight: 500; }
+.receipt-val.highlight { color: var(--success); font-size: 14px; font-family: 'Noto Sans JP', sans-serif; }
 .receipt-val.gold { color: var(--gold); }
 
 .warn-box {
-  background: var(--warn-bg);
-  border: 1px solid var(--warn-border);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  display: flex; gap: 10px; align-items: flex-start;
-  margin-bottom: 16px;
+  background: var(--warn-bg); border: 1px solid var(--warn-border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px;
 }
-.warn-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 .warn-box-text { font-size: 12px; color: #92400E; line-height: 1.7; }
 .warn-box-text strong { font-weight: 700; display: block; margin-bottom: 2px; }
 
 /* ── MODAL ── */
 .modal-overlay {
   display: none; position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.4);
-  align-items: flex-end; justify-content: center;
+  background: rgba(0,0,0,0.4); align-items: flex-end; justify-content: center;
   backdrop-filter: blur(2px);
 }
 .modal-overlay.open { display: flex; }
 
 .modal-sheet {
-  background: var(--surface);
-  border-radius: 20px 20px 0 0;
-  width: 100%; max-width: 480px;
-  padding: 0 0 32px;
-  animation: sheetUp 0.3s cubic-bezier(0.16,1,0.3,1);
-  position: relative;
+  background: var(--surface); border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 480px; padding: 0 0 36px;
+  animation: sheetUp 0.3s cubic-bezier(0.16,1,0.3,1); position: relative;
 }
-@keyframes sheetUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-.sheet-handle {
-  width: 36px; height: 4px; border-radius: 2px;
-  background: var(--border); margin: 12px auto 20px;
-}
+@keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+.sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 12px auto 20px; }
 .sheet-close {
   position: absolute; top: 14px; right: 16px;
   width: 28px; height: 28px; border-radius: 50%;
   background: var(--surface2); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--text2);
-  transition: background 0.15s;
+  font-size: 15px; color: var(--text2); transition: background 0.15s;
 }
 .sheet-close:hover { background: var(--border); }
-.sheet-body { padding: 0 24px; }
+.sheet-body { padding: 0 22px; }
 .sheet-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-.sheet-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.sheet-sub { font-size: 13px; color: var(--text2); margin-bottom: 18px; line-height: 1.6; }
 
 .pw-input {
   width: 100%; font-family: 'DM Mono', monospace;
-  font-size: 24px; font-weight: 500; letter-spacing: 0.2em; text-align: center;
+  font-size: 22px; font-weight: 500; letter-spacing: 0.2em; text-align: center;
   color: var(--text); background: var(--surface2);
   border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  padding: 14px; outline: none;
+  padding: 13px; outline: none; margin-bottom: 8px;
   transition: border-color 0.15s, box-shadow 0.15s;
-  margin-bottom: 8px;
 }
 .pw-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(43,92,230,0.12); background: var(--surface); }
-.pw-err { font-size: 12px; color: var(--danger); min-height: 18px; margin-bottom: 12px; }
+.pw-err { font-size: 12px; color: var(--danger); min-height: 18px; margin-bottom: 10px; }
 
-/* ── RETURN SHEET ── */
-.danger-sheet .sheet-title { color: var(--danger); }
-.danger-list { font-size: 13px; color: var(--text2); line-height: 1.9; margin-bottom: 20px; padding-left: 4px; }
+/* ── USER MENU ── */
+.user-role-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 4px; }
+.user-role-tag.admin { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
+.user-role-tag.staff { background: var(--accent-bg); color: var(--accent); border: 1px solid #C7D7FA; }
+
+.menu-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 14px; color: var(--text); transition: color 0.15s; }
+.menu-item:last-child { border-bottom: none; }
+.menu-item:hover { color: var(--accent); }
+.menu-item.danger { color: var(--danger); }
+.menu-item.danger:hover { color: #b91c1c; }
+.menu-icon { font-size: 18px; width: 24px; text-align: center; }
+
+/* ── DANGER LIST (return warning) ── */
+.danger-list { font-size: 13px; color: var(--text2); line-height: 1.9; margin-bottom: 18px; }
 .danger-list li { list-style: none; display: flex; gap: 8px; }
 .danger-list li::before { content: '·'; color: var(--danger); font-size: 18px; line-height: 1.3; flex-shrink: 0; }
 
 /* ── RESET FAB ── */
 .reset-fab {
   position: fixed; bottom: 20px; right: 16px; z-index: 100;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 11px; font-weight: 500; color: var(--danger);
-  background: var(--surface); border: 1px solid var(--danger-border);
-  border-radius: 20px; padding: 8px 14px;
-  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: all 0.15s; line-height: 1.5; text-align: center;
-  max-width: 180px;
+  font-family: 'Noto Sans JP', sans-serif; font-size: 11px; font-weight: 500;
+  color: var(--danger); background: var(--surface); border: 1px solid var(--danger-border);
+  border-radius: 20px; padding: 8px 14px; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.15s;
+  line-height: 1.5; text-align: center; max-width: 180px; display: none;
 }
-.reset-fab:hover { background: var(--danger-bg); box-shadow: 0 4px 12px rgba(220,38,38,0.15); }
+.reset-fab.visible { display: block; }
+.reset-fab:hover { background: var(--danger-bg); }
 
-/* screen visibility */
+/* ── ANIMATIONS ── */
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)}
+  30%{transform:translateX(7px)} 45%{transform:translateX(-5px)}
+  60%{transform:translateX(5px)} 75%{transform:translateX(-2px)} 90%{transform:translateX(2px)}
+}
+.shake { animation: shake 0.45s ease; }
+
+@keyframes overlayIn  { from{opacity:0} to{opacity:1} }
+@keyframes overlayOut { from{opacity:1} to{opacity:0} }
+@keyframes circlePop  { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.2)} 100%{transform:scale(1);opacity:1} }
+
+/* ── LOGIN SUCCESS OVERLAY ── */
+#login-success-overlay {
+  display: none; position: fixed; inset: 0; z-index: 900;
+  background: var(--accent); align-items: center; justify-content: center;
+  flex-direction: column; gap: 14px;
+}
+#login-success-overlay.visible { display: flex; animation: overlayIn 0.25s ease; }
+#lso-circle { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: circlePop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) 0.1s both; }
+#lso-name { font-size: 22px; font-weight: 700; color: #fff; }
+#lso-sub  { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+/* ── SCREENS ── */
 .screen { display: none; }
 .screen.active { display: block; }
 </style>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <div class="app-header">
   <div class="app-logo">ticket<span>.</span>verify</div>
-  <div class="app-badge" id="clock">--:--</div>
+  <div id="header-right">
+    <button class="header-login-btn" id="btn-login" onclick="openLoginSheet()">ログイン</button>
+    <div class="user-badge" id="user-badge" style="display:none;" onclick="openUserMenu()">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div class="user-name" id="user-name-label"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ── SCREEN 1: ENTRY ── -->
@@ -347,13 +328,11 @@ body {
     </div>
     <div class="card-body">
       <label class="field-label" for="code">シリアルコード</label>
-      <div class="code-input-wrap">
-        <input type="text" class="code-input" id="code"
-          placeholder="0000-0000-0000" maxlength="14"
-          autocomplete="off" spellcheck="false" inputmode="numeric" />
-      </div>
+      <input type="text" class="code-input" id="code"
+        placeholder="0000-0000-0000" maxlength="14"
+        autocomplete="off" spellcheck="false" inputmode="numeric" />
       <div class="err-msg" id="err-msg">
-        <svg class="err-icon" viewBox="0 0 16 16" fill="none">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0">
           <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
           <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
@@ -369,7 +348,7 @@ body {
   <div class="card">
     <div class="card-header">
       <div class="card-eyebrow">内容確認</div>
-      <div class="card-title" id="confirm-title">ご利用内容の確認</div>
+      <div class="card-title">ご利用内容の確認</div>
     </div>
     <div class="card-body">
       <div class="confirm-product" id="confirm-product-box">
@@ -379,7 +358,6 @@ body {
           <div class="confirm-product-label">サービス内容</div>
         </div>
       </div>
-
       <div id="confirm-details">
         <div class="detail-row">
           <span class="detail-key">シリアルコード</span>
@@ -390,13 +368,11 @@ body {
           <span class="detail-val" id="confirm-remaining-val" style="color:var(--gold)"></span>
         </div>
       </div>
-
       <div id="confirm-pips" class="pip-wrap" style="display:none">
-        <div class="pip-label">使用状況（🟤 使用済 ／ 🟡 今回 ／ ⬜ 残り）</div>
+        <div class="pip-label">使用状況（🔴 使用済 ／ 🟡 今回 ／ ⬜ 残り）</div>
         <div class="pip-bar" id="pip-bar"></div>
       </div>
-
-      <button class="btn-primary" id="confirm-btn" onclick="confirmUse()" style="margin-top:24px">この内容で使用する</button>
+      <button class="btn-primary" id="confirm-btn" onclick="confirmUse()" style="margin-top:22px">この内容で使用する</button>
       <button class="btn-secondary" onclick="cancelConfirm()">戻る</button>
     </div>
   </div>
@@ -408,10 +384,9 @@ body {
     <div class="success-icon-wrap">
       <div class="success-circle">✅</div>
     </div>
-    <div style="padding: 0 24px 24px;">
+    <div style="padding:0 22px 24px;">
       <div class="success-headline">支払処理完了</div>
       <div class="success-sub">この画面をお見せください</div>
-
       <div class="receipt-box">
         <div class="receipt-row">
           <span class="receipt-key">サービス</span>
@@ -430,67 +405,135 @@ body {
           <span class="receipt-val" id="result-time"></span>
         </div>
       </div>
-
       <div class="warn-box">
-        <div class="warn-box-icon">⚠️</div>
+        <div style="font-size:16px;flex-shrink:0;margin-top:1px;">⚠️</div>
         <div class="warn-box-text">
           <strong>戻る前にご確認ください</strong>
           確認してもらってから戻るボタンを押してください。戻ると再表示できません。
         </div>
       </div>
-
       <button class="btn-danger-outline" onclick="openReturnWarning()">← 戻る</button>
     </div>
   </div>
 </div>
 
 <!-- ── RESET FAB ── -->
-<button class="reset-fab" onclick="openResetModal()">🔄 使用状況をリセット<br>(すべて再利用可能に)</button>
+<button class="reset-fab" id="reset-fab" onclick="openResetFromMenu()">🔄 使用状況をリセット</button>
 
-<!-- ── RETURN WARNING SHEET ── -->
-<div class="modal-overlay" id="return-modal" onclick="handleOverlayClick(event,'return-modal')">
-  <div class="modal-sheet danger-sheet">
+<!-- ── LOGIN SUCCESS OVERLAY ── -->
+<div id="login-success-overlay">
+  <div id="lso-circle">✓</div>
+  <div id="lso-name"></div>
+  <div id="lso-sub">ログイン成功</div>
+</div>
+
+<!-- ── SHEET: LOGIN ── -->
+<div class="modal-overlay" id="login-modal" onclick="handleOverlayClick(event,'login-modal')">
+  <div class="modal-sheet" id="login-card">
     <div class="sheet-handle"></div>
-    <button class="sheet-close" onclick="closeReturnWarning()">✕</button>
+    <button class="sheet-close" onclick="closeSheet('login-modal')">✕</button>
     <div class="sheet-body">
-      <div class="sheet-title">本当に戻りますか？</div>
+      <div class="sheet-title">ログイン</div>
+      <div class="sheet-sub">アカウント情報を入力してください</div>
+      <div style="margin-bottom:14px;">
+        <label class="field-label" for="login-id">ユーザーID</label>
+        <input type="text" class="login-input" id="login-id" placeholder="ユーザーIDを入力" autocomplete="username" autocapitalize="none" />
+      </div>
+      <div style="margin-bottom:4px;">
+        <label class="field-label" for="login-pw">パスワード</label>
+        <div style="position:relative;">
+          <input type="password" class="login-input" id="login-pw" placeholder="パスワードを入力" autocomplete="current-password" style="padding-right:48px;" />
+          <button onclick="togglePw()" id="pw-eye" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:var(--text3);padding:4px;line-height:1;">👁</button>
+        </div>
+      </div>
+      <div class="login-err" id="login-err"></div>
+      <button class="btn-primary" onclick="doLogin()" style="margin-top:6px;">ログイン</button>
+      <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text3);line-height:1.7;">
+        アカウントをお持ちでない方は<br>
+        <span style="color:var(--accent);">管理者に直接お問い合わせください</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SHEET: USER MENU ── -->
+<div class="modal-overlay" id="user-menu-modal" onclick="handleOverlayClick(event,'user-menu-modal')">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeSheet('user-menu-modal')">✕</button>
+    <div class="sheet-body">
+      <div style="margin-bottom:18px;">
+        <div class="user-role-tag" id="menu-role-tag"></div>
+        <div style="font-size:17px;font-weight:700;margin-top:6px;" id="menu-display-name"></div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px;" id="menu-user-id"></div>
+      </div>
+      <div id="admin-menu-items" style="display:none;">
+        <div class="menu-item" onclick="openResetSheet()">
+          <span class="menu-icon">🔄</span>
+          <div>使用状況をリセット<br><span style="font-size:11px;color:var(--text3);">すべてのコードを再利用可能にする</span></div>
+        </div>
+      </div>
+      <div class="menu-item danger" onclick="doLogout()">
+        <span class="menu-icon">🚪</span>
+        <span>ログアウト</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SHEET: RETURN WARNING ── -->
+<div class="modal-overlay" id="return-modal" onclick="handleOverlayClick(event,'return-modal')">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeSheet('return-modal')">✕</button>
+    <div class="sheet-body">
+      <div class="sheet-title" style="color:var(--danger);">本当に戻りますか？</div>
       <div class="sheet-sub">以下の点をご確認の上、操作してください。</div>
       <ul class="danger-list">
         <li>確認してもらいましたか？</li>
         <li>戻ると完了画面は再表示できません</li>
       </ul>
       <button class="btn-danger-outline" onclick="doReturn()">確認済み・戻る</button>
-      <button class="btn-secondary" onclick="closeReturnWarning()">このままにする</button>
+      <button class="btn-secondary" onclick="closeSheet('return-modal')">このままにする</button>
     </div>
   </div>
 </div>
 
-<!-- ── RESET PASSWORD SHEET ── -->
+<!-- ── SHEET: RESET ── -->
 <div class="modal-overlay" id="reset-modal" onclick="handleOverlayClick(event,'reset-modal')">
   <div class="modal-sheet">
     <div class="sheet-handle"></div>
-    <button class="sheet-close" onclick="closeResetModal()">✕</button>
+    <button class="sheet-close" onclick="closeSheet('reset-modal')">✕</button>
     <div class="sheet-body">
       <div class="sheet-title">使用状況のリセット</div>
-      <div class="sheet-sub">管理者パスワードを入力してください。この操作はすべてのコードを再利用可能にします。</div>
-      <input type="password" class="pw-input" id="reset-pw" placeholder="······" maxlength="10" autocomplete="off" />
-      <div class="pw-err" id="reset-err"></div>
-      <button class="btn-primary" onclick="doReset()" style="margin-top:0">リセットを実行</button>
-      <button class="btn-secondary" onclick="closeResetModal()">キャンセル</button>
+      <div class="sheet-sub" id="reset-sheet-sub">この操作はすべてのコードを再利用可能にします。</div>
+      <div id="reset-pw-field">
+        <input type="password" class="pw-input" id="reset-pw" placeholder="管理者パスワード" maxlength="10" autocomplete="off" />
+        <div class="pw-err" id="reset-err"></div>
+      </div>
+      <button class="btn-primary" onclick="doReset()" style="margin-top:4px;">リセットを実行</button>
+      <button class="btn-secondary" onclick="closeSheet('reset-modal')">キャンセル</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── Codes ─────────────────────────────────────────────
+// ── Accounts ─────────────────────────────────────────────
+const ACCOUNTS = {
+  'admin': { password: '01100525', role: 'admin' }
+};
+
+// ── Codes ────────────────────────────────────────────────
 const SINGLE_CODES = new Set([
   '7454-6491-4491','5395-6549-1245','9453-5639-1549',
   '6495-2649-2375','9465-3264-9365'
 ]);
 const MULTI_CODE  = '6582-8562-7644';
 const MULTI_LIMIT = 10;
-const USED_KEY    = 'pv_used_hashes';
-const MULTI_KEY   = 'pv_multi_count';
+
+// ── Storage ──────────────────────────────────────────────
+const USED_KEY  = 'pv_used_hashes';
+const MULTI_KEY = 'pv_multi_count';
 
 async function hashStr(s) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
@@ -500,167 +543,272 @@ function getUsedHashes() {
   try { return new Set(JSON.parse(localStorage.getItem(USED_KEY)||'[]')); } catch { return new Set(); }
 }
 function saveUsedHash(h) {
-  const s=getUsedHashes(); s.add(h); localStorage.setItem(USED_KEY,JSON.stringify([...s]));
+  const s = getUsedHashes(); s.add(h);
+  localStorage.setItem(USED_KEY, JSON.stringify([...s]));
 }
-function getMultiCount() { return parseInt(localStorage.getItem(MULTI_KEY)||'0',10); }
-function incMultiCount() { localStorage.setItem(MULTI_KEY,String(getMultiCount()+1)); }
+function getMultiCount() { return parseInt(localStorage.getItem(MULTI_KEY)||'0', 10); }
+function incMultiCount() { localStorage.setItem(MULTI_KEY, String(getMultiCount()+1)); }
 
-// ── Clock ──────────────────────────────────────────────
-function tick() {
-  const d=new Date();
-  document.getElementById('clock').textContent=
-    [d.getHours(),d.getMinutes()].map(n=>String(n).padStart(2,'0')).join(':');
+// ── State ────────────────────────────────────────────────
+let currentUser    = null;
+let pendingCode    = '';
+let pendingIsMulti = false;
+
+// ── Screens ──────────────────────────────────────────────
+function show(id) {
+  ['s-entry','s-confirm','s-result'].forEach(s => {
+    document.getElementById(s).classList.toggle('active', s === id);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-tick(); setInterval(tick,1000);
 
-// ── Input ──────────────────────────────────────────────
-const input=document.getElementById('code');
-input.addEventListener('input',e=>{
-  const d=e.target.value.replace(/\D/g,'').slice(0,12);
-  e.target.value=d.replace(/(\d{4})(\d{1,4})?(\d{1,4})?/,(_,a,b,c)=>[a,b,c].filter(Boolean).join('-'));
+// ── Input ────────────────────────────────────────────────
+const codeInput = document.getElementById('code');
+codeInput.addEventListener('input', e => {
+  const d = e.target.value.replace(/\D/g,'').slice(0,12);
+  e.target.value = d.replace(/(\d{4})(\d{1,4})?(\d{1,4})?/, (_,a,b,c) => [a,b,c].filter(Boolean).join('-'));
   setError('');
 });
-input.addEventListener('keydown',e=>{ if(e.key==='Enter') verify(); });
+codeInput.addEventListener('keydown', e => { if(e.key==='Enter') verify(); });
 
 function setError(msg) {
-  const el=document.getElementById('err-msg');
-  document.getElementById('err-text').textContent=msg;
-  el.classList.toggle('visible',!!msg);
-  input.classList.toggle('error',!!msg);
+  document.getElementById('err-text').textContent = msg;
+  document.getElementById('err-msg').classList.toggle('visible', !!msg);
+  codeInput.classList.toggle('error', !!msg);
 }
 
-// ── Screens ────────────────────────────────────────────
-let pendingCode='', pendingIsMulti=false;
-
-function show(id) {
-  ['s-entry','s-confirm','s-result'].forEach(s=>{
-    document.getElementById(s).classList.toggle('active',s===id);
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
+// ── Login ────────────────────────────────────────────────
+function openLoginSheet() {
+  document.getElementById('login-id').value = '';
+  document.getElementById('login-pw').value = '';
+  document.getElementById('login-pw').type  = 'password';
+  document.getElementById('pw-eye').textContent = '👁';
+  document.getElementById('login-err').style.opacity = '0';
+  document.getElementById('login-id').classList.remove('error');
+  document.getElementById('login-pw').classList.remove('error');
+  openSheet('login-modal');
+  setTimeout(() => document.getElementById('login-id').focus(), 300);
 }
 
-// ── Step 1: verify ─────────────────────────────────────
-async function verify() {
-  const code=input.value.trim();
-  if(!code){ setError('コードを入力してください'); return; }
-  const isMulti=code===MULTI_CODE;
-  const isSingle=SINGLE_CODES.has(code);
-  if(!isMulti&&!isSingle){ setError('コードが正しくありません'); return; }
-  if(isMulti){
-    if(getMultiCount()>=MULTI_LIMIT){ setError('このコードの使用回数が上限に達しています'); return; }
-  } else {
-    const hash=await hashStr(code);
-    if(getUsedHashes().has(hash)){ setError('このコードはすでに使用済みです'); return; }
+function togglePw() {
+  const inp = document.getElementById('login-pw');
+  const eye = document.getElementById('pw-eye');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  eye.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function showLoginErr(msg) {
+  const el = document.getElementById('login-err');
+  el.textContent = '⚠ ' + msg;
+  el.style.opacity = '1';
+  ['login-id','login-pw'].forEach(id => document.getElementById(id).classList.add('error'));
+  const card = document.getElementById('login-card');
+  card.classList.remove('shake');
+  void card.offsetWidth;
+  card.classList.add('shake');
+}
+
+function doLogin() {
+  const id  = document.getElementById('login-id').value.trim();
+  const pw  = document.getElementById('login-pw').value;
+  const acc = ACCOUNTS[id];
+  if (!acc || pw !== acc.password) {
+    showLoginErr('IDまたはパスワードが正しくありません');
+    return;
   }
-  pendingCode=code; pendingIsMulti=isMulti;
-  buildConfirm(); show('s-confirm');
+  currentUser = { id, ...acc };
+  closeSheet('login-modal');
+
+  // Swap header
+  document.getElementById('btn-login').style.display   = 'none';
+  document.getElementById('user-badge').style.display  = 'flex';
+  const avatar = document.getElementById('user-avatar');
+  avatar.textContent = currentUser.id.slice(0,1).toUpperCase();
+  avatar.className   = 'user-avatar' + (currentUser.role === 'admin' ? ' admin' : '');
+  document.getElementById('user-name-label').textContent = currentUser.id;
+
+  // Show admin fab
+  if (currentUser.role === 'admin') {
+    document.getElementById('reset-fab').classList.add('visible');
+  }
+
+  // Success overlay
+  const overlay = document.getElementById('login-success-overlay');
+  document.getElementById('lso-name').textContent = 'こんにちは、' + currentUser.id;
+  overlay.classList.add('visible');
+  setTimeout(() => {
+    overlay.style.animation = 'overlayOut 0.3s ease forwards';
+    setTimeout(() => {
+      overlay.classList.remove('visible');
+      overlay.style.animation = '';
+    }, 300);
+  }, 1300);
+}
+
+function doLogout() {
+  closeSheet('user-menu-modal');
+  currentUser = null;
+  document.getElementById('btn-login').style.display  = 'block';
+  document.getElementById('user-badge').style.display = 'none';
+  document.getElementById('reset-fab').classList.remove('visible');
+  pendingCode = ''; pendingIsMulti = false;
+  setError('');
+  show('s-entry');
+}
+
+// ── User menu ────────────────────────────────────────────
+function openUserMenu() {
+  document.getElementById('menu-display-name').textContent = currentUser.id;
+  document.getElementById('menu-user-id').textContent = '@' + currentUser.id;
+  const tag = document.getElementById('menu-role-tag');
+  tag.textContent = currentUser.role === 'admin' ? '管理者' : 'スタッフ';
+  tag.className   = 'user-role-tag ' + currentUser.role;
+  document.getElementById('admin-menu-items').style.display = currentUser.role === 'admin' ? 'block' : 'none';
+  openSheet('user-menu-modal');
+}
+
+// ── Verify ───────────────────────────────────────────────
+async function verify() {
+  if (!currentUser) { setError('右上のログインボタンからログインしてください'); return; }
+  const code    = codeInput.value.trim();
+  if (!code) { setError('コードを入力してください'); return; }
+  const isMulti  = code === MULTI_CODE;
+  const isSingle = SINGLE_CODES.has(code);
+  if (!isMulti && !isSingle) { setError('コードが正しくありません'); return; }
+  if (isMulti) {
+    if (getMultiCount() >= MULTI_LIMIT) { setError('このコードの使用回数が上限に達しています'); return; }
+  } else {
+    if (getUsedHashes().has(await hashStr(code))) { setError('このコードはすでに使用済みです'); return; }
+  }
+  pendingCode = code; pendingIsMulti = isMulti;
+  buildConfirm();
+  show('s-confirm');
 }
 
 function buildConfirm() {
-  const isMulti=pendingIsMulti;
-  const count=isMulti?getMultiCount():0;
-  const remaining=MULTI_LIMIT-count;
-  const box=document.getElementById('confirm-product-box');
-  const btn=document.getElementById('confirm-btn');
-
-  if(isMulti){
+  const isMulti   = pendingIsMulti;
+  const count     = isMulti ? getMultiCount() : 0;
+  const remaining = MULTI_LIMIT - count;
+  const box = document.getElementById('confirm-product-box');
+  const btn = document.getElementById('confirm-btn');
+  if (isMulti) {
     box.classList.add('gold-variant');
-    document.getElementById('confirm-icon').textContent='💆';
-    document.getElementById('confirm-product-name').textContent='マッサージ 10回分';
-    btn.style.background='var(--gold)';
-    btn.style.boxShadow='0 2px 8px rgba(180,83,9,0.3)';
-    document.getElementById('confirm-remaining-row').style.display='flex';
-    document.getElementById('confirm-remaining-val').textContent=`${remaining-1} 回`;
-    const pips=document.getElementById('confirm-pips');
-    pips.style.display='block';
-    const bar=document.getElementById('pip-bar');
-    bar.innerHTML='';
-    for(let i=0;i<MULTI_LIMIT;i++){
-      const p=document.createElement('div');
-      p.className='pip'+(i<count?' used':i===count?' current':'');
+    document.getElementById('confirm-product-name').textContent = 'マッサージ 10回分';
+    btn.style.background = 'var(--gold)';
+    btn.style.boxShadow  = '0 2px 8px rgba(180,83,9,0.3)';
+    document.getElementById('confirm-remaining-row').style.display = 'flex';
+    document.getElementById('confirm-remaining-val').textContent   = `${remaining-1} 回`;
+    document.getElementById('confirm-pips').style.display = 'block';
+    const bar = document.getElementById('pip-bar');
+    bar.innerHTML = '';
+    for (let i=0; i<MULTI_LIMIT; i++) {
+      const p = document.createElement('div');
+      p.className = 'pip' + (i<count ? ' used' : i===count ? ' current' : '');
       bar.appendChild(p);
     }
   } else {
     box.classList.remove('gold-variant');
-    document.getElementById('confirm-icon').textContent='💆';
-    document.getElementById('confirm-product-name').textContent='マッサージ 1回分';
-    btn.style.background='';
-    btn.style.boxShadow='';
-    document.getElementById('confirm-remaining-row').style.display='none';
-    document.getElementById('confirm-pips').style.display='none';
+    document.getElementById('confirm-product-name').textContent = 'マッサージ 1回分';
+    btn.style.background = '';
+    btn.style.boxShadow  = '';
+    document.getElementById('confirm-remaining-row').style.display = 'none';
+    document.getElementById('confirm-pips').style.display = 'none';
   }
-  document.getElementById('confirm-code-disp').textContent=pendingCode;
+  document.getElementById('confirm-code-disp').textContent = pendingCode;
 }
 
-// ── Step 2: confirm ────────────────────────────────────
 async function confirmUse() {
-  if(pendingIsMulti){ incMultiCount(); }
+  if (pendingIsMulti) { incMultiCount(); }
   else { saveUsedHash(await hashStr(pendingCode)); }
-
-  const count=pendingIsMulti?getMultiCount():0;
-  const remaining=MULTI_LIMIT-count;
-  const now=new Date();
-  const ts=[now.getFullYear(),now.getMonth()+1,now.getDate()].map((n,i)=>i?String(n).padStart(2,'0'):n).join('/')
-    +' '+[now.getHours(),now.getMinutes()].map(n=>String(n).padStart(2,'0')).join(':');
-
-  document.getElementById('result-product').textContent=pendingIsMulti?'マッサージ 10回分':'マッサージ 1回分';
-  document.getElementById('result-code').textContent=pendingCode;
-  document.getElementById('result-time').textContent=ts;
-  const remRow=document.getElementById('result-remaining-row');
-  if(pendingIsMulti){
-    remRow.style.display='flex';
-    document.getElementById('result-remaining-num').textContent=`${remaining} 回`;
-  } else { remRow.style.display='none'; }
+  const count     = pendingIsMulti ? getMultiCount() : 0;
+  const remaining = MULTI_LIMIT - count;
+  const now = new Date();
+  const ts  = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} `
+            + `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('result-product').textContent = pendingIsMulti ? 'マッサージ 10回分' : 'マッサージ 1回分';
+  document.getElementById('result-code').textContent    = pendingCode;
+  document.getElementById('result-time').textContent    = ts;
+  const remRow = document.getElementById('result-remaining-row');
+  if (pendingIsMulti) {
+    remRow.style.display = 'flex';
+    document.getElementById('result-remaining-num').textContent = `${remaining} 回`;
+  } else {
+    remRow.style.display = 'none';
+  }
   show('s-result');
 }
 
 function cancelConfirm() { show('s-entry'); }
 
-// ── Return flow ────────────────────────────────────────
-function openReturnWarning(){ openSheet('return-modal'); }
-function closeReturnWarning(){ closeSheet('return-modal'); }
-function doReturn(){ closeReturnWarning(); pendingCode=''; pendingIsMulti=false; show('s-entry'); }
-
-// ── Reset flow ─────────────────────────────────────────
-function openResetModal(){
-  document.getElementById('reset-pw').value='';
-  document.getElementById('reset-err').textContent='';
-  openSheet('reset-modal');
-  setTimeout(()=>document.getElementById('reset-pw').focus(),300);
+// ── Return ───────────────────────────────────────────────
+function openReturnWarning() { openSheet('return-modal'); }
+function doReturn() {
+  closeSheet('return-modal');
+  pendingCode = ''; pendingIsMulti = false;
+  show('s-entry');
 }
-function closeResetModal(){ closeSheet('reset-modal'); }
-function doReset(){
-  if(document.getElementById('reset-pw').value!=='749424'){
-    document.getElementById('reset-err').textContent='パスワードが正しくありません';
+
+// ── Reset ────────────────────────────────────────────────
+function openResetSheet() {
+  closeSheet('user-menu-modal');
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  document.getElementById('reset-pw-field').style.display = isAdmin ? 'none' : 'block';
+  document.getElementById('reset-sheet-sub').textContent  = isAdmin
+    ? '管理者権限で実行します。すべてのコードを再利用可能にします。'
+    : '管理者パスワードを入力してください。';
+  document.getElementById('reset-pw').value = '';
+  document.getElementById('reset-err').textContent = '';
+  openSheet('reset-modal');
+}
+
+function openResetFromMenu() { openResetSheet(); }
+
+function doReset() {
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  if (!isAdmin && document.getElementById('reset-pw').value !== '749424') {
+    document.getElementById('reset-err').textContent = 'パスワードが正しくありません';
     return;
   }
   localStorage.removeItem(USED_KEY);
   localStorage.removeItem(MULTI_KEY);
-  closeResetModal();
-  const fab=document.querySelector('.reset-fab');
-  const orig=fab.innerHTML;
-  fab.innerHTML='✓ リセット完了';
-  fab.style.color='var(--success)';
-  fab.style.borderColor='var(--success-border)';
-  setTimeout(()=>{ fab.innerHTML=orig; fab.style.color=''; fab.style.borderColor=''; },2000);
+  closeSheet('reset-modal');
+  const t = document.createElement('div');
+  t.textContent = '✓ リセット完了';
+  Object.assign(t.style, {
+    position:'fixed', bottom:'80px', left:'50%', transform:'translateX(-50%)',
+    background:'var(--success)', color:'#fff', padding:'10px 24px',
+    borderRadius:'20px', fontSize:'13px', fontWeight:'700',
+    zIndex:'1000', boxShadow:'0 4px 12px rgba(0,0,0,0.15)'
+  });
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
 }
 
-// ── Sheet helpers ──────────────────────────────────────
-function openSheet(id){ document.getElementById(id).classList.add('open'); }
-function closeSheet(id){ document.getElementById(id).classList.remove('open'); }
-function handleOverlayClick(e,id){ if(e.target===document.getElementById(id)) closeSheet(id); }
+// ── Sheet helpers ────────────────────────────────────────
+function openSheet(id)  { document.getElementById(id).classList.add('open'); }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+function handleOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeSheet(id); }
 
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    closeSheet('return-modal'); closeSheet('reset-modal');
-  }
-  if(e.key==='Enter'){
-    if(document.getElementById('reset-modal').classList.contains('open')) doReset();
-  }
+// ── Keyboard ─────────────────────────────────────────────
+document.getElementById('login-id').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-pw').focus();
 });
-
-document.getElementById('reset-pw').addEventListener('keydown',e=>{
-  if(e.key==='Enter') doReset();
+document.getElementById('login-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('reset-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doReset();
+});
+['login-id','login-pw'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    document.getElementById('login-err').style.opacity = '0';
+    ['login-id','login-pw'].forEach(i => document.getElementById(i).classList.remove('error'));
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['login-modal','return-modal','reset-modal','user-menu-modal'].forEach(closeSheet);
+  }
 });
 </script>
 </body>
